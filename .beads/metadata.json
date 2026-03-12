@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "helm_charts",
+  "project_id": "d866015c-4ab3-4f37-b12b-a4caf33e60fe"
+}
