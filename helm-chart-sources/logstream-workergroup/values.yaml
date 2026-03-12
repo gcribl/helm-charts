@@ -31,7 +31,9 @@ imagePullSecrets: []
 nameOverride: ""
 
 config: 
+  # -- Leader host for url-master. Ignored when leaderReleaseName is set (then host becomes <leaderReleaseName>-leader-internal). Set leaderReleaseName to your leader Helm release name when both are in the same cluster to avoid DNS resolution issues.
   host: logstream-leader-internal
+  # leaderReleaseName: ""  # When set, worker connects to <leaderReleaseName>-leader-internal
   port: 4200
   group: kubernetes
   token: criblleader
