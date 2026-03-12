@@ -57,6 +57,9 @@ config:
   tlsLeader:
     enable: false
   tags: []
+  # -- When set, a writable volume is mounted at this path and CRIBL_VOLUME_DIR is set (for OpenShift/non-root). Use criblVolumeStorage to choose emptyDir or an existing PVC.
+  # criblVolumeDir: ""
+  # criblVolumeStorage: {}  # optional: existingClaim: "<pvc-name>" for PVC; omit for emptyDir
 
 deployment: deployment
 

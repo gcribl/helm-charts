@@ -62,6 +62,10 @@ containers:
       # Self-Signed Certs
       - name: NODE_TLS_REJECT_UNAUTHORIZED
         value: "{{ .Values.config.rejectSelfSignedCerts }}"
+      {{- if .Values.config.criblVolumeDir }}
+      - name: CRIBL_VOLUME_DIR
+        value: {{ .Values.config.criblVolumeDir | quote }}
+      {{- end }}
       {{ if .Values.envValueFrom }}
       {{ toYaml .Values.envValueFrom | nindent 6  }}
       {{- end }}
@@ -71,6 +75,10 @@ containers:
       {{- end }}
 
     volumeMounts:
+      {{- if .Values.config.criblVolumeDir }}
+      - name: cribl-volume
+        mountPath: {{ .Values.config.criblVolumeDir }}
+      {{- end }}
       {{- range .Values.extraConfigmapMounts }}
       - name: {{ .name }}
         mountPath: {{ .mountPath }}
@@ -123,7 +131,16 @@ tolerations:
 {{ toYaml . }}
 {{- end }}
 
-volumes: 
+volumes:
+  {{- if .Values.config.criblVolumeDir }}
+  - name: cribl-volume
+    {{- if .Values.config.criblVolumeStorage.existingClaim }}
+    persistentVolumeClaim:
+      claimName: {{ .Values.config.criblVolumeStorage.existingClaim }}
+    {{- else }}
+    emptyDir: {}
+    {{- end }}
+  {{- end }}
   {{- if (ne .Values.deployment "statefulset") -}}
   {{- range .Values.extraVolumeMounts }}
   - name: {{ .name }}
