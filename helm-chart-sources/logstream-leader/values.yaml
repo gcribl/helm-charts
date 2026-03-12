@@ -27,6 +27,8 @@ config:
   leaderUrl:
   adminPassword:
   criblHome: /opt/cribl
+  # -- Optional override for config-storage mount path and CRIBL_VOLUME_DIR. For OpenShift or non-root, set to a writable mount path (e.g. /tmp).
+  # criblVolumeDir: ""
   bindHost: 0.0.0.0
   rejectSelfSignedCerts: 0
   # -- Perform health checks on the Leader pod.
