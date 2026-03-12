@@ -43,6 +43,10 @@ The chart requires persistent storage; it will use your default storage class, o
 
 If you're running on EKS, see the [EKS-Specific Issues](../../common_docs/EKS_SPECIFICS.md) doc for details.
 
+## OpenShift
+
+For deploying on Red Hat OpenShift, see [OPENSHIFT_SPECIFICS.md](../../common_docs/OPENSHIFT_SPECIFICS.md). Summary of key overrides: set `podSecurityContext` (runAsUser, runAsGroup, fsGroup) to your project UID; set `config.criblVolumeDir` (e.g. `/tmp`) so config-storage is writable under non-root; set `config.healthScheme: HTTPS` when the leader API uses TLS; set `service.externalType` to `ClusterIP` (or NodePort) because LoadBalancer is often disallowed; create a custom SCC and bind it to the chart's ServiceAccount.
+
 # Values to Override
 
 This section covers the most likely values to override. To see the full scope of values available, run `helm show values cribl/logstream-leader`. 
