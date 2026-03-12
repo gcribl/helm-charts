@@ -134,7 +134,7 @@ tolerations:
 volumes:
   {{- if .Values.config.criblVolumeDir }}
   - name: cribl-volume
-    {{- if .Values.config.criblVolumeStorage.existingClaim }}
+    {{- if and .Values.config.criblVolumeStorage .Values.config.criblVolumeStorage.existingClaim }}
     persistentVolumeClaim:
       claimName: {{ .Values.config.criblVolumeStorage.existingClaim }}
     {{- else }}
