@@ -122,8 +122,21 @@ strategy:
 
 podAnnotations: {}
 
+# For OpenShift or non-root: set runAsUser, runAsGroup, fsGroup to your project UID (e.g. from oc describe project <name>).
+# podSecurityContext:
+#   runAsUser: 1000620000
+#   runAsGroup: 1000620000
+#   fsGroup: 1000620000
 podSecurityContext: {}
 
+# For OpenShift/non-root with low ports or diagnostics, add capabilities (requires custom SCC).
+# securityContext:
+#   capabilities:
+#     add:
+#       - CAP_NET_BIND_SERVICE
+#       - CAP_SYS_PTRACE
+#       - CAP_DAC_READ_SEARCH
+#       - CAP_NET_ADMIN
 securityContext: {}
 
 ingress:
