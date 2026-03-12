@@ -24,6 +24,15 @@ This chart does **not** deploy a leader node – it depends on that node's alrea
 2. Cribl helm repo configured. To do this:
 	`helm repo add cribl https://criblio.github.io/helm-charts/`
 
+## OpenShift
+
+For deploying on Red Hat OpenShift, see [OPENSHIFT_SPECIFICS.md](../../common_docs/OPENSHIFT_SPECIFICS.md). Summary of key overrides: set `podSecurityContext` (runAsUser, runAsGroup, fsGroup) to your project UID; set `config.criblVolumeDir` (and optionally `config.criblVolumeStorage`) for a writable volume; set `service.type` to `ClusterIP` (or NodePort) because LoadBalancer is often disallowed; set `config.leaderReleaseName` to your leader Helm release name so workers resolve `<release>-leader-internal`; create a custom SCC and bind it to the chart's ServiceAccount.
+
+## Known limitations
+
+- **TCP only:** The chart's Service exposes TCP ports only. UDP (e.g. syslog UDP) is not supported in the service definition.
+- **Persistent Queues (PQ) and autoscaling:** When using persistent queues, prefer StatefulSet deployment mode so worker pods maintain stable identity and volume attachment. Avoid aggressive scale-in; sudden scale-down can abandon PQ data. `extraVolumeMounts` are used both for PQ storage and, on OpenShift/non-root, for writable storage—see the OpenShift doc for the combination.
+
 # <span id="values"> Values to Override </span>
 
 This section covers the most likely values to override. To see the full scope of values available, run `helm show values cribl/logstream-workergroup`. 
