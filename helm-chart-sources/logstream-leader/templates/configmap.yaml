@@ -9,5 +9,5 @@ metadata:
 data:
   .gitconfig: |
     [safe]
-    directory = {{ .Values.config.criblHome }}/config-volume
+    directory = {{ include "logstream-leader.configVolumePath" . }}
 {{- end }}
