@@ -73,12 +73,26 @@ containers:
       {{- end }}
     {{- if .Values.config.probes }}
     {{- with .Values.config.livenessProbe }}
+    {{- if $.Values.config.healthScheme }}
+    {{- $liveness := deepCopy . }}
+    {{- $_ := set $liveness.httpGet "scheme" $.Values.config.healthScheme }}
+    livenessProbe:
+      {{- toYaml $liveness | nindent 6 }}
+    {{- else }}
     livenessProbe:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+    {{- end }}
     {{- with .Values.config.readinessProbe }}
+    {{- if $.Values.config.healthScheme }}
+    {{- $readiness := deepCopy . }}
+    {{- $_ := set $readiness.httpGet "scheme" $.Values.config.healthScheme }}
+    readinessProbe:
+      {{- toYaml $readiness | nindent 6 }}
+    {{- else }}
     readinessProbe:
       {{- toYaml . | nindent 6 }}
+    {{- end }}
     {{- end }}
     {{- end }}
     resources:

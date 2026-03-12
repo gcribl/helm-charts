@@ -34,6 +34,8 @@ config:
   # -- Perform health checks on the Leader pod.
   # Recommended that this be enabled to automatically restart the Leader if the Pod is unhealthy
   probes: true
+  # -- Override HTTP probe scheme (e.g. HTTPS when TLS is enabled on the leader API). When set, applied to both liveness and readiness probes.
+  # healthScheme: HTTPS
   livenessProbe:
     httpGet:
       path: /api/v1/health
