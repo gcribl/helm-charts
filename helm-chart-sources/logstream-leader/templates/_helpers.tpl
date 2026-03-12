@@ -55,6 +55,13 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Effective config volume path: criblVolumeDir if set, else criblHome/config-volume. Used for mount path and CRIBL_VOLUME_DIR (OpenShift/non-root).
+*/}}
+{{- define "logstream-leader.configVolumePath" -}}
+{{- .Values.config.criblVolumeDir | default (printf "%s/config-volume" .Values.config.criblHome) }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "logstream-leader.serviceAccountName" -}}

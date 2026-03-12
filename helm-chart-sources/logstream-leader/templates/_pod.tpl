@@ -36,7 +36,7 @@ containers:
     {{- end }}
     volumeMounts:
     - name: config-storage
-      mountPath: {{ .Values.config.criblHome }}/config-volume
+      mountPath: {{ include "logstream-leader.configVolumePath" . }}
     {{- if  or .Values.config.license ( or .Values.config.adminPassword .Values.config.groups ) }}
     - name: initial-config
       mountPath: /var/tmp/config_bits
@@ -99,7 +99,7 @@ containers:
       {{- end }}
       # Single Volume for persistence (CRIBL-3848)
       - name: CRIBL_VOLUME_DIR
-        value: {{ .Values.config.criblHome }}/config-volume
+        value: {{ include "logstream-leader.configVolumePath" . }}
       {{ if .Values.envValueFrom }}
       {{ toYaml .Values.envValueFrom | nindent 6  }}
       {{- end }}
@@ -138,13 +138,13 @@ initContainers:
     command: ["/bin/ash","-c"]
     args:
       - for dir in local data state groups; do
-          if [ ! -d {{ .Values.config.criblHome }}/config-volume/$dir ]; then
-            (cd {{ .Values.config.criblHome }}; tar cf - --exclude lost+found .) | (cd {{ .Values.config.criblHome }}/config-volume; tar xf -);
+          if [ ! -d {{ include "logstream-leader.configVolumePath" . }}/$dir ]; then
+            (cd {{ .Values.config.criblHome }}; tar cf - --exclude lost+found .) | (cd {{ include "logstream-leader.configVolumePath" . }}; tar xf -);
           fi
         done
     volumeMounts:
       - name: config-storage
-        mountPath: {{ .Values.config.criblHome }}/config-volume
+        mountPath: {{ include "logstream-leader.configVolumePath" . }}
       - name: local-storage
         mountPath: {{ .Values.config.criblHome }}/local
       - name: data-storage
