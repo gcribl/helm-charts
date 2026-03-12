@@ -21,6 +21,12 @@ As built, this chart will deploy a Cribl Stream Leader server, consisting of a 
 
 Note: Two load-balanced services are created – the main one (named after the Helm release), which is intended as the primary service interface for users; and the "internal" one (named `<helm-release>-internal`), which is intended for the workergroup-to-leader communication.
 
+## Leader HA and internal service name
+
+**Leader HA is not supported** with `replicaCount` > 1. The chart does not provide shared failover volume, lock/lease, or single-active semantics; multiple leader replicas yield undefined behavior.
+
+The internal service name is **`<release>-leader-internal`** (e.g. if you install with `helm install myrelease cribl/logstream-leader`, the internal service is `myrelease-leader-internal`). Worker groups must reach the leader via this name. When installing the workergroup chart, set `config.host` to `<release>-leader-internal` (where `<release>` is your leader Helm release name), or set `config.leaderReleaseName` to the leader release name so the worker resolves the correct internal service.
+
 # <span id="pre-reqs"> Prerequisites </span>
 
 ## Helm Setup
