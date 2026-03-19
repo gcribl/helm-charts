@@ -6,7 +6,8 @@
 replicaCount: 1
 
 criblImage:
-  repository: cribl/cribl
+  # Fully qualified for OpenShift/CRI-O (short names like cribl/cribl fail with "ambiguous list")
+  repository: docker.io/cribl/cribl
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: 4.17.0

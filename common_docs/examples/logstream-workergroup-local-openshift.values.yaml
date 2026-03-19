@@ -1,0 +1,23 @@
+# -----------------------------------------------------------------------------
+# logstream-workergroup — CRC / single-node OpenShift (CPU scheduling)
+# -----------------------------------------------------------------------------
+# Default chart values request 1250m CPU per pod AND HPA minReplicas: 2
+# (2.5 vCPU for workers alone), which usually cannot schedule after leader + OCP.
+# Merge with your OpenShift values or use as second -f file:
+#   helm upgrade cribl-worker ./helm-chart-sources/logstream-workergroup -n cribl-stream \
+#     -f worker-openshift-values.yaml -f common_docs/examples/logstream-workergroup-local-openshift.values.yaml
+# -----------------------------------------------------------------------------
+
+# Turn off HPA and run a single worker pod for dev
+autoscaling:
+  enabled: false
+replicaCount: 1
+
+# Tiny requests so the scheduler can place the pod; limits allow real CPU/RAM use
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 4096Mi
